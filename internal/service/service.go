@@ -28,7 +28,7 @@ func NewShortenerService(repo repository.URLRepository, cache repository.Cache, 
 }
 
 func (s *shortenerService) CreateShortURL(ctx context.Context, originalURL string) (string, error) {
-	// Проверка кэша
+
 	if cached, err := s.cache.Get(ctx, originalURL); err == nil {
 		return cached, nil
 	}
