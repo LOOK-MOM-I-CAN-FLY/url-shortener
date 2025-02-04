@@ -51,18 +51,18 @@ func (s *shortenerService) CreateShortURL(ctx context.Context, originalURL strin
 }
 
 func (s *shortenerService) GetOriginalURL(ctx context.Context, shortCode string) (string, error) {
-	// Проверка кэша
+
 	if cached, err := s.cache.Get(ctx, shortCode); err == nil {
 		return cached, nil
 	}
 
-	// Поиск в базе
+
 	originalURL, err := s.repo.FindByShortCode(ctx, shortCode)
 	if err != nil {
 		return "", err
 	}
 
-	// Обновление кэша
+
 	go func() {
 		if err := s.cache.Set(context.Background(), shortCode, originalURL); err != nil {
 			s.logger.Warn("Cache update failed", zap.Error(err))
